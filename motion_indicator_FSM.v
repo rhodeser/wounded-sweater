@@ -36,7 +36,7 @@ parameter
 		E 		= 5'd20,
 		F 		= 5'd21,
 		G 		= 5'd22,								  
-		BLANK 	= 5'd0,
+		BLANK 	= 5'd23,
 		
 		segment_a 	=	8'b00000001,
 		segment_b 	=	8'b00000010,
@@ -242,8 +242,24 @@ end
 				  
 			end
 			
-			default:
-				NextState = no_segment;			//Precaution, blank if get here
+			no_segment:
+			begin
+				if		(STOP) 					NextState = segment_g;
+				else if (RIGHT_1x && tick5hz) 	NextState = segment_a;
+				else if (RIGHT_2x)				NextState = segment_a;
+				else if (LEFT_1x  && tick5hz) 	NextState = segment_f;			
+				else if (LEFT_2x)				NextState = segment_f;
+				else if (FORWARD) begin
+					 if (tick2hz)    	NextState = no_segment;
+                     else                    	NextState = segment_a;
+            end
+				else if (REVERSE) begin
+                     if (tick2hz)  		NextState = no_segment;
+                     else                  		NextState = segment_d;
+                     end
+				else 							NextState = no_segment;	
+				   
+			end
 			
 	endcase
 	end
