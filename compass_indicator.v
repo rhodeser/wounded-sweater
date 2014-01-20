@@ -25,11 +25,10 @@ module compass_indicator(
   localparam rojobot_cnt_10 = simulate ? 26'd10			// rojobot clock when simulating
                                       : 26'd9_999_999; // rojobot count when running on HW (10Hz)     
                                                                  
-  localparam rojobot_cnt_1 = simulate ? 26'd10			// rojobot clock when simulating
-                                      : 26'd99_999_995; // rojobot count when running on HW (1Hz)     
-                                                                       
+                                                                        
   	//internal registers	
 	reg [25:0]	ck_count = 0;	//clock divider counter
+	reg [25:0]	ck_count_2 = 0;
 	reg 		tick5hz;		// 5 Hz clock enable
 	reg 		tick10hz;		// 10 Hz clock enable
 	
@@ -48,12 +47,12 @@ module compass_indicator(
    
    	// generate 10Hz clock enable
 	always @(posedge clk) begin
-		if (ck_count == rojobot_cnt_10) begin
+		if (ck_count_2 == rojobot_cnt_10) begin
 		    tick10hz <= 1'b1;
-		    ck_count <= 0;
+		    ck_count_2 <= 0;
 		end
 		else begin
-		    ck_count <= ck_count + 1'b1;
+		    ck_count_2 <= ck_count_2 + 1'b1;
 		    tick10hz <= 0;
     end 
   end
