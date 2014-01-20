@@ -1,3 +1,4 @@
+`timescale  1 ns / 1 ns
 module motion_FSM(
     input [2:0] motion_mode,
     input clk, reset,
